@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Interview Feedback Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f8f9fa;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 { text-align: center; color: #333; }
+    label { display: block; margin-top: 1rem; font-weight: bold; }
+    input, textarea, select {
+      width: 100%; padding: 0.6rem; border: 1px solid #ccc;
+      border-radius: 6px; font-size: 1rem;
+    }
+    button {
+      margin-top: 1rem; background: #007bff; color: white;
+      border: none; padding: 0.8rem 1.2rem; border-radius: 6px;
+      cursor: pointer; width: 100%; font-size: 1rem;
+    }
+    button:hover { background: #0056b3; }
+  </style>
+</head>
+<body>
+  <h2>Interview Practice Feedback</h2>
+  <form id="interviewForm">
+    <label>Session ID <input name="session_id" required /></label>
+    <label>Role <input name="role" required /></label>
+    <label>English Level
+      <select name="english_level">
+        <option>Beginner</option>
+        <option>Intermediate</option>
+        <option>Advanced</option>
+      </select>
+    </label>
+    <label>Questions <textarea name="questions" placeholder="List questions asked"></textarea></label>
+    <label>Answers <textarea name="answers" placeholder="Write the user’s answers"></textarea></label>
+    <label>Scores <textarea name="scores" placeholder="JSON or plain text"></textarea></label>
+    <label>Final Summary <textarea name="final_summary" placeholder="Summary or notes"></textarea></label>
+    <label><input type="checkbox" name="user_consent" /> I agree to share this data anonymously</label>
+    <button type="submit">Submit Feedback</button>
+  </form>
+
+  <script>
+    const form = document.getElementById('interviewForm');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(form));
+      data.user_consent = !!data.user_consent;
+      const response = await fetch('https://script.google.com/macros/s/AKfycbzdA1Dj8mkVLJWiy4W3OABcu3Gd832UGyS80isNBvem4NMz9pKDjixvWuAkJxPGx5W3/exec', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      const result = await response.json();
+      alert(result.message || 'Submitted!');
+      form.reset();
+    });
+  </script>
+</body>
+</html>
